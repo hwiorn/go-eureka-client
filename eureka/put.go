@@ -19,3 +19,19 @@ func (c *Client) SendHeartbeat(appId, instanceId string) error {
 	}
 	return nil
 }
+
+func (c *Client) UpdateStatus(instance *InstanceInfo, status string) error {
+	values := []string{"apps", instance.App, instance.HostName, "status"}
+	path := strings.Join(values, "/") + "?value=" + status
+	resp, err := c.Put(path, nil)
+	if err != nil {
+		return err
+	}
+	switch resp.StatusCode {
+	case http.StatusNotFound:
+		return newError(ErrCodeInstanceNotFound,
+			"Instance resource not found when sending status", 0)
+	}
+	instance.Status = status
+	return nil
+}
