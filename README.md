@@ -16,11 +16,14 @@ func main() {
 		// add others servers here
 	})
 	instance := eureka.NewInstanceInfo("test.com", "test", "69.172.200.235", 80, 30, false) //Create a new instance to register
+	instance.Status = eureka.STARTING // Some instances can be waiting for long initializing.
+
 	instance.Metadata = &eureka.MetaData{
 		Map: make(map[string]string),
 	}
 	instance.Metadata.Map["foo"] = "bar" //add metadata for example
 	client.RegisterInstance("myapp", instance) // Register new instance in your eureka(s)
+	client.UpdateStatus(instance, eureka.UP) // Update the instance status to avialable
 	applications, _ := client.GetApplications() // Retrieves all applications from eureka server(s)
 	client.GetApplication(instance.App) // retrieve the application "test"
 	client.GetInstance(instance.App, instance.HostName) // retrieve the instance from "test.com" inside "test"" app

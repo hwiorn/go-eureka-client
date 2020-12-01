@@ -22,6 +22,7 @@ const (
 	UP = "UP"
 	DOWN = "DOWN"
 	STARTING = "STARTING"
+	OUT_OF_SERVICE = "OUT_OF_SERVICE"
 )
 
 type Config struct {
